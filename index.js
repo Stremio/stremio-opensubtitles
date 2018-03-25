@@ -38,7 +38,7 @@ function subsFindCached(args, cb) {
 			// Do not serve .zip subtitles unless we explicitly allow it
 			var count = res.all.length;
 			var mostByMeta = (res.all.filter(function(x) { return x.m === "i" }).length / res.all.length) > 0.9;
-			var ttlHours = (count < 10 || mostByMeta) ? 12 : (count < 50 ? 24 : 7*24 )
+			var ttlHours = (count < 10 || mostByMeta) ? 12 : (count < 50 ? 24 : 14*24 )
 			cacheSet("subtitles-v3", id, res, ttlHours * 60 * 60 * 1000)
 
 			cb(err, prep(res));
