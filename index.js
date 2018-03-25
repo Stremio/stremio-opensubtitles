@@ -27,19 +27,29 @@ function subsFindCached(args, cb) {
 		return subtitles;
 	}
 
-	cacheGet("subtitles-v3", id, function(err, subs) {
+	cacheGet("subtitles-v3", id, function(err, subs, upToDate) {
 		if (err) console.error(err);
 
-		if (subs) return cb(null, prep(subs));
+		if (subs && upToDate) return cb(null, prep(subs));
 
 		find(args, function(err, res) {
-			if (err || !res) return cb(err, res);
+			if (err || !res) {
+				return cb(err, subs ? prep(subs) : res);
+			}
 
 			// Do not serve .zip subtitles unless we explicitly allow it
 			var count = res.all.length;
+
+			if (! count && subs && subs.all.length) {
+				cb(null, prep(subs))
+				return
+			}
+
 			var mostByMeta = (res.all.filter(function(x) { return x.m === "i" }).length / res.all.length) > 0.9;
 			var ttlHours = (count < 10 || mostByMeta) ? 12 : (count < 50 ? 24 : 14*24 )
-			cacheSet("subtitles-v3", id, res, ttlHours * 60 * 60 * 1000)
+			cacheSet("subtitles-v3", id, res, ttlHours * 60 * 60 * 1000, function(err) {
+				if (err) console.error(err)
+			})
 
 			cb(err, prep(res));
 		});
