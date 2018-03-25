@@ -28,7 +28,7 @@ if (process.env.META_DB_REDIS || process.env.REDIS) {
 
                 var upToDate = expiry ? (Date.now()/1000 < expiry) : true
 
-                if (process.env.CACHING_LOG) console.log("cache on "+domain+":"+key+": "+(res ? "HIT" : "MISS")+" upToDate: "+upToDate);
+                console.log("cache on "+domain+":"+key+": "+(res ? "HIT" : "MISS")+" upToDate: "+upToDate);
 
                 cb(null, res, upToDate)
             })
