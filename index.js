@@ -10,6 +10,8 @@ var find = require("./lib/find");
 var tracks = require("./lib/tracks");
 var hash = require("./lib/hash");
 
+var KEY = "subtitles-v4"
+
 var cacheGet, cacheSet;
 
 // In memory, allow this to be overridden
@@ -27,7 +29,7 @@ function subsFindCached(args, cb) {
 		return subtitles;
 	}
 
-	cacheGet("subtitles-v3", id, function(err, subs, upToDate) {
+	cacheGet(KEY, id, function(err, subs, upToDate) {
 		if (err) console.error(err);
 
 		if (subs && upToDate) return cb(null, prep(subs));
@@ -47,7 +49,7 @@ function subsFindCached(args, cb) {
 
 			var mostByMeta = (res.all.filter(function(x) { return x.m === "i" }).length / res.all.length) > 0.9;
 			var ttlHours = (count < 10 || mostByMeta) ? 12 : (count < 50 ? 24 : 14*24 )
-			cacheSet("subtitles-v3", id, res, ttlHours * 60 * 60 * 1000, function(err) {
+			cacheSet(KEY, id, res, ttlHours * 60 * 60 * 1000, function(err) {
 				if (err) console.error(err)
 			})
 
