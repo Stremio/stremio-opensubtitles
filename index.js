@@ -42,7 +42,7 @@ function subsFindCached(args, cb) {
 			// Do not serve .zip subtitles unless we explicitly allow it
 			var count = res.all.length;
 
-			if (! count && subs && subs.all.length) {
+			if (!count && subs && subs.all.length) {
 				cb(null, prep(subs))
 				return
 			}
