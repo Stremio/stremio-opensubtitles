@@ -15,7 +15,7 @@ This add-on is hosted at [opensubtitles.strem.io](http://opensubtitles.strem.io/
 Alternatively, you can run locally by:
 
 ```
-git clone http://github.com/Stremio/stremio-opensubtitles
+git clone git@bitbucket.org:stremio/stremio-opensubtitles.git
 cd stremio-opensubtitles
 npm install
 npm start
