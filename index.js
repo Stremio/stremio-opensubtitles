@@ -82,7 +82,7 @@ var manifest = {
 var service = new addons.Server({
 	"subtitles.get": subsGet,
 	"subtitles.find": subsFindCached,
-	"subtitles.tracks": tracks,
+	//"subtitles.tracks": tracks,
 	//"subtitles.hash": hash, // don't expose this, as stremio will send links to localhost:11470, which are not accessible when this add-on is hosted remotely
 	"stats.get": function(args, cb, user) {
 
