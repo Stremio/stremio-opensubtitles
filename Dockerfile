@@ -1,6 +1,5 @@
-
-# Node 4.4 on Debian Jessie
-FROM node:argon
+# Stremio Node 8.x
+FROM stremio/node-base
 
 # Meta
 MAINTAINER Ivo Georgiev <ivo@strem.io>
