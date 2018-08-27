@@ -28,6 +28,7 @@
     "async": "1.x.x",
     "moment": "^2.10.6",
     "opensubtitles": "0.0.1",
+    "redis": "^2.8.0",
     "simple-get": "2.3.x",
     "stremio-addons": "^2.8.3",
     "stremio-db-connections": "git+ssh://git@github.com/stremio/stremio-db-connections.git",

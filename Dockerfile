@@ -12,7 +12,6 @@ RUN mkdir -p /var/www/opensubtitles
 WORKDIR /var/www/opensubtitles
 COPY package.json /var/www/opensubtitles
 RUN npm install --silent 
-RUN npm install redis
 
 # Bundle app source
 WORKDIR /var/www/opensubtitles
