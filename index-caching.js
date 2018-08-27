@@ -53,6 +53,6 @@ var server = http.createServer(function (req, res) {
 	service.middleware(req, res, function() { res.end() });
 }).listen(process.env.PORT || 3011).on("listening", function()
 {
-	console.log("OpenSubtitles (with redis caching) listening on "+server.address().port);
+	console.log("OpenSubtitles listening on "+server.address().port);
 });	
 server.on("error", function(e) { console.error(e) });
