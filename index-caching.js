@@ -2,12 +2,13 @@ var service = require("./index")
 var http = require("http")
 
 // Caching for stremio-opensubtitles
-if (process.env.META_DB_REDIS || process.env.REDIS) {
+var redisUrl = process.env.DB_REDIS || process.env.META_DB_REDIS || process.env.REDIS
+if (redisUrl) {
 	// In redis
 	console.log("Using redis caching for OpenSubtitles");
 
 	var redis = require("redis");
-	red = redis.createClient(process.env.META_DB_REDIS || process.env.REDIS);
+	red = redis.createClient(redisUrl);
 	red.on("error", function(err) { console.error("redis err",err) });
 
 	var cacheGet, cacheSet;
