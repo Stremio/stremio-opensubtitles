@@ -30,6 +30,7 @@
     "opensubtitles": "0.0.1",
     "simple-get": "2.3.x",
     "stremio-addons": "^2.8.3",
+    "stremio-db-connections": "git+ssh://git@github.com/stremio/stremio-db-connections.git",
     "subtitles-grouping": "1.5.x",
     "underscore": "1.8.x",
     "xmlrpc": "1.x.x"

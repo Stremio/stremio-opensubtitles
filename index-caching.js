@@ -7,8 +7,8 @@ if (redisUrl) {
 	// In redis
 	console.log("Using redis caching for OpenSubtitles");
 
-	var redis = require("redis");
-	red = redis.createClient(redisUrl);
+	const db_connections = require("stremio-db-connections")
+	red = db_connections.redisClient()
 	red.on("error", function(err) { console.error("redis err",err) });
 
 	var cacheGet, cacheSet;
