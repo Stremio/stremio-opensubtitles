@@ -12,6 +12,10 @@ var hash = require("./lib/hash");
 
 var KEY = "subtitles-v4"
 
+var TTL_HOURS_WHEN_SMALL_RESP = 8
+var TTL_HOURS_WHEN_MEDIUM_RESP = 24
+var TTL_HOURS_WHEN_LARGE_RESP = 14 * 24
+
 var cacheGet, cacheSet;
 
 // In memory, allow this to be overridden
@@ -48,7 +52,7 @@ function subsFindCached(args, cb) {
 			}
 
 			var mostByMeta = (res.all.filter(function(x) { return x.m === "i" }).length / res.all.length) > 0.9;
-			var ttlHours = (count < 10 || mostByMeta) ? 12 : (count < 50 ? 24 : 14*24 )
+			var ttlHours = (count < 10 || mostByMeta) ? TTL_HOURS_WHEN_SMALL_RESP : (count < 50 ? TTL_HOURS_WHEN_MEDIUM_RESP : TTL_HOURS_WHEN_LARGE_RESP )
 			cacheSet(KEY, id, res, ttlHours * 60 * 60 * 1000, function(err) {
 				if (err) console.error(err)
 			})
