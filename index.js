@@ -12,7 +12,7 @@ var hash = require("./lib/hash");
 
 var KEY = "subtitles-v4"
 
-var TTL_HOURS_WHEN_SMALL_RESP = 8
+var TTL_HOURS_WHEN_SMALL_RESP = 6
 var TTL_HOURS_WHEN_MEDIUM_RESP = 24
 var TTL_HOURS_WHEN_LARGE_RESP = 14 * 24
 
