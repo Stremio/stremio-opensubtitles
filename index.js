@@ -25,10 +25,12 @@ cacheSet = function(domain, key, value, ttl) { }
 function modifyDownloadUrl(url) {
         if (typeof(url) !== 'string') return
         return url
-                .replace('download/src-api', 'download/subencoding-stremio-utf8/src-api')
-                .replace('download/subencoding-utf8/src-api', 'download/subencoding-stremio-utf8/src-api')
+                //.replace('download/src-api', 'download/subencoding-stremio-utf8/src-api')
+                //.replace('download/subencoding-utf8/src-api', 'download/subencoding-stremio-utf8/src-api')
+		.replace('download/subencoding-utf8/src-api', 'download/src-api')
                 .replace(/\.gz$/, '')
-                .replace('dl.opensubtitles.org', 'subs5.strem.io')
+                //.replace('dl.opensubtitles.org', 'subs5.strem.io')
+                .replace('subs5.strem.io', 'dl.opensubtitles.org')
                 .replace('http://', 'https://')
                 // temporary hack to work around short URLs from opensubtitles which don't work
                 .replace('/src-api/file/', '/src-api/vrf-19cf0c58/sid-zCXEYCzIEKsCd0ZkqIMB9CHSPNc/filead/')
