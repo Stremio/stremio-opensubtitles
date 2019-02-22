@@ -10,7 +10,7 @@ var find = require("./lib/find");
 var tracks = require("./lib/tracks");
 var hash = require("./lib/hash");
 
-var KEY = "subtitles-v5"
+var KEY = "subtitles-v4"
 
 var TTL_HOURS_WHEN_SMALL_RESP = 6
 var TTL_HOURS_WHEN_MEDIUM_RESP = 24
