@@ -3,7 +3,7 @@ FROM stremio/node-base
 
 # Meta
 MAINTAINER Ivo Georgiev <ivo@strem.io>
-LABEL Description="Stremio OpenSubtitles" Vendor="Smart Code ltd" Version="1.16.2"
+LABEL Description="Stremio OpenSubtitles" Vendor="Smart Code ltd" Version="0.21.0"
 
 # Create app directory
 RUN mkdir -p /var/www/opensubtitles
