@@ -22,6 +22,19 @@ var cacheGet, cacheSet;
 cacheGet = function (domain, key, cb) { cb(null, null) }
 cacheSet = function(domain, key, value, ttl) { }
 
+function modifyDownloadUrl(url) {
+        if (typeof(url) !== 'string') return
+        return url
+                .replace('download/src-api', 'download/subencoding-stremio-utf8/src-api')
+                .replace('download/subencoding-utf8/src-api', 'download/subencoding-stremio-utf8/src-api')
+                .replace(/\.gz$/, '')
+                .replace('dl.opensubtitles.org', 'subs5.strem.io')
+                .replace('http://', 'https://')
+                // temporary hack to work around short URLs from opensubtitles which don't work
+                .replace('/src-api/file/', '/src-api/vrf-19cf0c58/sid-zCXEYCzIEKsCd0ZkqIMB9CHSPNc/filead/')
+                .replace('/src-api/filead/', '/src-api/vrf-19cf0c58/sid-zCXEYCzIEKsCd0ZkqIMB9CHSPNc/filead/')
+}
+
 function subsFindCached(args, cb) {
 	if (! args) return cb({ code: 14, message: "args required" });
 	if (! (args.query || args.hash)) return cb({ code: 13, message: "query/hash required" });
@@ -30,6 +43,10 @@ function subsFindCached(args, cb) {
 
 	function prep(subtitles) {
 		if (!args.supportsZip) subtitles.all = subtitles.all.filter(function(sub) { return sub.url && !sub.url.match("zip$") });
+		subtitles.all = subtitles.all.map(function(s) {
+			s.url = modifyDownloadUrl(s.url)
+			return s
+		})
 		return subtitles;
 	}
 
