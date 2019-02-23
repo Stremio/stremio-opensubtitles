@@ -22,19 +22,13 @@ var cacheGet, cacheSet;
 cacheGet = function (domain, key, cb) { cb(null, null) }
 cacheSet = function(domain, key, value, ttl) { }
 
-function modifyDownloadUrl(url) {
-        if (typeof(url) !== 'string') return
-        return url
-                //.replace('download/src-api', 'download/subencoding-stremio-utf8/src-api')
-                //.replace('download/subencoding-utf8/src-api', 'download/subencoding-stremio-utf8/src-api')
-		.replace('download/subencoding-utf8/src-api', 'download/src-api')
-                .replace(/\.gz$/, '')
-                //.replace('dl.opensubtitles.org', 'subs5.strem.io')
-                .replace('subs5.strem.io', 'dl.opensubtitles.org')
-                .replace('http://', 'https://')
-                // temporary hack to work around short URLs from opensubtitles which don't work
-                .replace('/src-api/file/', '/src-api/vrf-19cf0c58/sid-zCXEYCzIEKsCd0ZkqIMB9CHSPNc/filead/')
-                .replace('/src-api/filead/', '/src-api/vrf-19cf0c58/sid-zCXEYCzIEKsCd0ZkqIMB9CHSPNc/filead/')
+const PROXY_URL = 'https://subs5.strem.io'
+
+function rewriteUrl(url) {
+	const fileId = url.replace('.gz', '').split('/').pop()
+	if (isNaN(fileId)) throw 'unable to get file id from '+url
+	// subencoding-stremio-utf8 forces our proxy to always reencode
+	return PROXY_URL+'/en/download/subencoding-stremio-utf8/src-api/file/'+fileId
 }
 
 function subsFindCached(args, cb) {
@@ -46,7 +40,7 @@ function subsFindCached(args, cb) {
 	function prep(subtitles) {
 		if (!args.supportsZip) subtitles.all = subtitles.all.filter(function(sub) { return sub.url && !sub.url.match("zip$") });
 		subtitles.all = subtitles.all.map(function(s) {
-			s.url = modifyDownloadUrl(s.url)
+			s.url = rewriteUrl(s.url)
 			return s
 		})
 		return subtitles;
