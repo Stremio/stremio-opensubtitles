@@ -38,7 +38,9 @@ function subsFindCached(args, cb) {
 	var id = args.hash ? args.hash : (args.query.videoHash || args.query.itemHash || args.query.item_hash); // item_hash is the obsolete property
 
 	function prep(subtitles) {
-		if (!args.supportsZip) subtitles.all = subtitles.all.filter(function(sub) { return sub.url && !sub.url.match("zip$") });
+		// This is a legacy property that is no longer needed
+		// we do not return zip results anymore
+		//if (!args.supportsZip) subtitles.all = subtitles.all.filter(function(sub) { return sub.url && !sub.url.match("zip$") });
 		subtitles.all = subtitles.all.map(function(s) {
 			s.url = rewriteUrl(s.url)
 			return s
@@ -91,7 +93,7 @@ var manifest = {
 	"id": "org.stremio.opensubtitles", 
 	"description": "The official add-on for subtitles from OpenSubtitles",
 	"version": require("./package").version,
-	"types": ["series","movie"],
+	"types": ["series","movie", "other"],
 	"endpoint": "http://opensubtitles.strem.io/stremioget/stremio/v1",
 	"logo": "http://www.strem.io/images/addons/opensubtitles-logo.png"
 };
