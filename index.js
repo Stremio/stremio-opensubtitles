@@ -116,3 +116,5 @@ var server = http.createServer(function (req, res) {
 	console.log("Subtitles listening on "+server.address().port);
 });
 server.on("error", function(e) { console.error(e) });
+
+module.exports = service

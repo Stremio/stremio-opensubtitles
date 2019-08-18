@@ -12,7 +12,7 @@ if (redisUrl) {
 	red.on("error", function(err) { console.error("redis err",err) });
 
 	var cacheGet, cacheSet;
-    cacheGet = function (domain, key, cb) { 
+        cacheGet = function (domain, key, cb) { 
         red.get(domain+":"+key, function(err, res) { 
             if (err) return cb(err);
 
@@ -47,13 +47,3 @@ if (redisUrl) {
 
 	service.setCaching(cacheGet, cacheSet);
 }
-
-
-var server = http.createServer(function (req, res) {
-	if (req.url.match("^/subtitles.vtt") || req.url.match("^/subtitles.srt")) return service.proxySrtOrVtt(req, res);
-	service.middleware(req, res, function() { res.end() });
-}).listen(process.env.PORT || 3011).on("listening", function()
-{
-	console.log("OpenSubtitles listening on "+server.address().port);
-});	
-server.on("error", function(e) { console.error(e) });
