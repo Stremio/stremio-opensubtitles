@@ -51,7 +51,9 @@ function subsFindCached(args, cb) {
 	cacheGet(KEY, id, function(err, subs, upToDate) {
 		if (err) console.error(err);
 
-		if (subs && upToDate) return cb(null, prep(subs));
+		// @TEMP opensubtitles down setting
+		return cb(null, prep(subs));
+		//if (subs && upToDate) return cb(null, prep(subs));
 
 		find(args, function(err, res) {
 			if (err || !res) {
