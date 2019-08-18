@@ -1,7 +1,6 @@
 var addons = require("stremio-addons");
 var http = require("http");
 var _ = require("underscore");
-var moment = require("moment");
 var url = require("url");
 
 /* Basic glue
