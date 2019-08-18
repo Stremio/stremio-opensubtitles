@@ -7,7 +7,6 @@ var url = require("url");
 /* Basic glue
  */
 var find = require("./lib/find");
-var tracks = require("./lib/tracks");
 
 var KEY = "subtitles-v4"
 
@@ -104,7 +103,6 @@ var manifest = {
 var service = new addons.Server({
 	"subtitles.get": subsGet,
 	"subtitles.find": subsFindCached,
-	//"subtitles.tracks": tracks,
 	"stats.get": function(args, cb, user) {
 		var pkg = require("./package"); 
 		cb(null, { name: pkg.name, version: pkg.version, stats: [{name: "subtitles", colour:"green"}], statsNum: "~ 3000000 subtitle files" });
