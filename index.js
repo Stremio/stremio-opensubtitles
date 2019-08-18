@@ -111,48 +111,10 @@ var service = new addons.Server({
 	}
 },  { stremioget: true, allow: ["http://api9.strem.io"] }, manifest);
 
-service.proxySrtOrVtt = function(req, res) {
-	// req.params.delay
-	var isVtt = req.url.match('^/subtitles.vtt'); // we can set it to false for srt
-	var query = url.parse(req.url, true).query;
-	var offset = query.offset ? parseInt(query.offset) : null;
-	service.request("subtitles.tracks", [{ stremioget: true }, { url: query.from }], function(err, handle) {
-		if (err) {
-			console.error(err);
-			res.writeHead(500);
-			res.end();
-			return;
-		}
-		if (isVtt) res.write("WEBVTT\n\n");
-		var format = function(d) {
-			return isVtt ? moment(d).utcOffset(0).format("HH:mm:ss.SSS") : moment(d).utcOffset(0).format("HH:mm:ss,SSS")
-		};
-		var applOffset = offset ? function(d) { return new Date(new Date(d).getTime() + offset) } : function(d) { return new Date(d); };
-		handle.tracks.forEach(function(track, i) {
-			res.write(i.toString()+"\n");
-			res.write(format(applOffset(track.startTime)) + " --> " + format(applOffset(track.endTime)) +"\n");
-			res.write(track.text.replace(/&/g, "&amp;")+"\n\n"); // TODO: sanitize?
-		});
-		res.end();
-	});
-}
-service.subtitlesHash = hash;
-module.exports = service;
-
-module.exports.setCaching = function(get, set) {
-	cacheGet = get;
-	cacheSet = set;
-}
-
-/* Init server
- */
-if (require.main !== module) { module.exports = service; } else {
-	var server = http.createServer(function (req, res) {
-          if (req.url.match("^/subtitles.vtt") || req.url.match("^/subtitles.srt")) return service.proxySrtOrVtt(req, res);
-	  service.middleware(req, res, function() { res.end() });
-	}).listen(process.env.PORT || 3011).on("listening", function()
-	{
-		console.log("Subtitles listening on "+server.address().port);
-	});	
-	server.on("error", function(e) { console.error(e) });
-}
+var server = http.createServer(function (req, res) {
+  service.middleware(req, res, function() { res.end() });
+}).listen(process.env.PORT || 3011).on("listening", function()
+{
+	console.log("Subtitles listening on "+server.address().port);
+});
+server.on("error", function(e) { console.error(e) });
