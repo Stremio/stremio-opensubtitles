@@ -52,15 +52,19 @@ function subsFindCached(args, cb) {
 		if (err) console.error(err);
 
 		// @TEMP opensubtitles down setting
-		return cb(null, prep(subs));
+		if (subs) return cb(null, prep(subs));
 		//if (subs && upToDate) return cb(null, prep(subs));
 
 		find(args, function(err, res) {
 			if (err || !res) {
-				return cb(err, subs ? prep(subs) : res);
+				if (subs) {
+					if (err) console.log(err, err.body)
+					return cb(null, prep(subs(subs)))
+				} else {
+					return cb(err, null);
+				}
 			}
 
-			// Do not serve .zip subtitles unless we explicitly allow it
 			var count = res.all.length;
 
 			if (!count && subs && subs.all.length) {
