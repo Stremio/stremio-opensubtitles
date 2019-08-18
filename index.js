@@ -8,7 +8,6 @@ var url = require("url");
  */
 var find = require("./lib/find");
 var tracks = require("./lib/tracks");
-var hash = require("./lib/hash");
 
 var KEY = "subtitles-v4"
 
@@ -106,9 +105,7 @@ var service = new addons.Server({
 	"subtitles.get": subsGet,
 	"subtitles.find": subsFindCached,
 	//"subtitles.tracks": tracks,
-	//"subtitles.hash": hash, // don't expose this, as stremio will send links to localhost:11470, which are not accessible when this add-on is hosted remotely
 	"stats.get": function(args, cb, user) {
-
 		var pkg = require("./package"); 
 		cb(null, { name: pkg.name, version: pkg.version, stats: [{name: "subtitles", colour:"green"}], statsNum: "~ 3000000 subtitle files" });
 	}
