@@ -107,6 +107,11 @@ var service = new addons.Server({
 	}
 },  { stremioget: true, allow: ["http://api9.strem.io"] }, manifest);
 
+service.setCaching = function(get, set) {
+	cacheGet = get
+	cacheSet = set
+}
+
 var server = http.createServer(function (req, res) {
   service.middleware(req, res, function() { res.end() });
 }).listen(process.env.PORT || 3011).on("listening", function()
