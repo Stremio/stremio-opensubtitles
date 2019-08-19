@@ -53,7 +53,7 @@ function subsFindCached(args, cb) {
 			if (err || !res) {
 				if (subs) {
 					if (err) console.log(err, err.body)
-					return cb(null, prep(subs(subs)))
+					return cb(null, prep(subs))
 				} else {
 					return cb(err, null);
 				}
