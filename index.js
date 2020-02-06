@@ -3,6 +3,8 @@ var http = require("http");
 var _ = require("underscore");
 var moment = require("moment");
 var url = require("url");
+const cp1250Langs = require('./cp1250Languages')
+const dict = require('./openSubtitlesDictionary')
 
 /* Basic glue
  */
@@ -23,7 +25,6 @@ cacheGet = function (domain, key, cb) { cb(null, null) }
 cacheSet = function(domain, key, value, ttl) { }
 
 const PROXY_URL = 'https://subs5.strem.io'
-
 function rewriteUrl(url) {
 	const fileId = url.replace('.gz', '').split('/').pop()
 	if (isNaN(fileId)) throw 'unable to get file id from '+url
@@ -42,7 +43,13 @@ function subsFindCached(args, cb) {
 		// we do not return zip results anymore
 		//if (!args.supportsZip) subtitles.all = subtitles.all.filter(function(sub) { return sub.url && !sub.url.match("zip$") });
 		subtitles.all = subtitles.all.map(function(s) {
-			s.url = rewriteUrl(s.url)
+			const shouldUseCP1250 =
+				typeof s.SubEncoding === 'string' &&
+				s.SubEncoding.toLowerCase() === 'cp1250' &&
+				cp1250Langs.includes(s.lang.toLowerCase())
+			const senc = shouldUseCP1250 ? `?senc=${s.SubEncoding.toLowerCase()}` : ''
+			s.url = rewriteUrl(s.url)+senc
+			s.lang = dict[s.lang] ? dict[s.lang] : s.lang
 			return s
 		})
 		return subtitles;
