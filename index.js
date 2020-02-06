@@ -21,6 +21,7 @@ cacheGet = function (domain, key, cb) { cb(null, null) }
 cacheSet = function(domain, key, value, ttl) { }
 
 const PROXY_URL = 'https://subs5.strem.io'
+
 function rewriteUrl(url) {
 	const fileId = url.replace('.gz', '').split('/').pop()
 	if (isNaN(fileId)) throw 'unable to get file id from '+url
