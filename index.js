@@ -1,8 +1,6 @@
 var addons = require("stremio-addons");
 var http = require("http");
 var _ = require("underscore");
-var moment = require("moment");
-var url = require("url");
 const cp1250Langs = require('./cp1250Languages')
 const dict = require('./openSubtitlesDictionary')
 
