@@ -9,13 +9,11 @@ const dict = require('./openSubtitlesDictionary')
 /* Basic glue
  */
 var find = require("./lib/find");
-var tracks = require("./lib/tracks");
-var hash = require("./lib/hash");
 
 var KEY = "subtitles-v4"
 
-var TTL_HOURS_WHEN_SMALL_RESP = 6
-var TTL_HOURS_WHEN_MEDIUM_RESP = 24
+var TTL_HOURS_WHEN_SMALL_RESP = 8
+var TTL_HOURS_WHEN_MEDIUM_RESP = 30
 var TTL_HOURS_WHEN_LARGE_RESP = 14 * 24
 
 var cacheGet, cacheSet;
@@ -62,10 +60,14 @@ function subsFindCached(args, cb) {
 
 		find(args, function(err, res) {
 			if (err || !res) {
-				return cb(err, subs ? prep(subs) : res);
+				if (subs) {
+					if (err) console.log(err, err.body)
+					return cb(null, prep(subs))
+				} else {
+					return cb(err, null);
+				}
 			}
 
-			// Do not serve .zip subtitles unless we explicitly allow it
 			var count = res.all.length;
 
 			if (!count && subs && subs.all.length) {
@@ -108,57 +110,23 @@ var manifest = {
 var service = new addons.Server({
 	"subtitles.get": subsGet,
 	"subtitles.find": subsFindCached,
-	//"subtitles.tracks": tracks,
-	//"subtitles.hash": hash, // don't expose this, as stremio will send links to localhost:11470, which are not accessible when this add-on is hosted remotely
 	"stats.get": function(args, cb, user) {
-
 		var pkg = require("./package"); 
 		cb(null, { name: pkg.name, version: pkg.version, stats: [{name: "subtitles", colour:"green"}], statsNum: "~ 3000000 subtitle files" });
 	}
 },  { stremioget: true, allow: ["http://api9.strem.io"] }, manifest);
 
-service.proxySrtOrVtt = function(req, res) {
-	// req.params.delay
-	var isVtt = req.url.match('^/subtitles.vtt'); // we can set it to false for srt
-	var query = url.parse(req.url, true).query;
-	var offset = query.offset ? parseInt(query.offset) : null;
-	service.request("subtitles.tracks", [{ stremioget: true }, { url: query.from }], function(err, handle) {
-		if (err) {
-			console.error(err);
-			res.writeHead(500);
-			res.end();
-			return;
-		}
-		if (isVtt) res.write("WEBVTT\n\n");
-		var format = function(d) {
-			return isVtt ? moment(d).utcOffset(0).format("HH:mm:ss.SSS") : moment(d).utcOffset(0).format("HH:mm:ss,SSS")
-		};
-		var applOffset = offset ? function(d) { return new Date(new Date(d).getTime() + offset) } : function(d) { return new Date(d); };
-		handle.tracks.forEach(function(track, i) {
-			res.write(i.toString()+"\n");
-			res.write(format(applOffset(track.startTime)) + " --> " + format(applOffset(track.endTime)) +"\n");
-			res.write(track.text.replace(/&/g, "&amp;")+"\n\n"); // TODO: sanitize?
-		});
-		res.end();
-	});
-}
-service.subtitlesHash = hash;
-module.exports = service;
-
-module.exports.setCaching = function(get, set) {
-	cacheGet = get;
-	cacheSet = set;
+service.setCaching = function(get, set) {
+	cacheGet = get
+	cacheSet = set
 }
 
-/* Init server
- */
-if (require.main !== module) { module.exports = service; } else {
-	var server = http.createServer(function (req, res) {
-          if (req.url.match("^/subtitles.vtt") || req.url.match("^/subtitles.srt")) return service.proxySrtOrVtt(req, res);
-	  service.middleware(req, res, function() { res.end() });
-	}).listen(process.env.PORT || 3011).on("listening", function()
-	{
-		console.log("Subtitles listening on "+server.address().port);
-	});	
-	server.on("error", function(e) { console.error(e) });
-}
+var server = http.createServer(function (req, res) {
+  service.middleware(req, res, function() { res.end() });
+}).listen(process.env.PORT || 3011).on("listening", function()
+{
+	console.log("Subtitles listening on "+server.address().port);
+});
+server.on("error", function(e) { console.error(e) });
+
+module.exports = service

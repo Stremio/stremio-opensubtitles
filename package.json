@@ -1,6 +1,6 @@
 {
   "name": "stremio-opensubtitles",
-  "version": "0.22.0",
+  "version": "0.24.0",
   "description": "Stremio service for OpenSubtitles",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,6 @@
   "homepage": "https://github.com/Ivshti/stremio-opensubtitles",
   "dependencies": {
     "async": "1.x.x",
-    "moment": "^2.10.6",
     "opensubtitles": "0.0.1",
     "redis": "^2.8.0",
     "simple-get": "2.3.x",
