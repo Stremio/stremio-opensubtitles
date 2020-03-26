@@ -1,1 +1,1 @@
-module.exports = ['pol', 'cze', 'slo', 'hun', 'slv', 'bos', 'srp', 'hrv']
+module.exports = ['pol', 'cze', 'slo', 'hun', 'slv', 'bos', 'srp', 'hrv', 'rum', 'ron']
