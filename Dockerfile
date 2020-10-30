@@ -10,7 +10,7 @@ RUN mkdir -p /var/www/opensubtitles
 
 # install app dependencies
 WORKDIR /var/www/opensubtitles
-COPY package.json /var/www/opensubtitles
+COPY package.json package-lock.json /var/www/opensubtitles/
 RUN npm install --silent 
 
 # Bundle app source
