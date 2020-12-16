@@ -1,5 +1,5 @@
-# Stremio Node 8.x
-FROM stremio/node-base
+# Stremio Node 14.x
+FROM stremio/node-base:fermium
 
 # Meta
 MAINTAINER Ivo Georgiev <ivo@strem.io>
